@@ -25,14 +25,9 @@ public class UsersController extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html;charset = UTF-8");
-
-
+        //获取路径信息
         String pathInfo = request.getPathInfo();
         String path = PathUTil.getPath(pathInfo);
-
-
         ResponseCode rs =null;
         switch (path){
             case "list":
@@ -41,13 +36,17 @@ public class UsersController extends HttpServlet {
             case "login":
                 rs = loginDo(request);
                 break;
+            case "disableuser":
+                rs = disableuserDo(request);
+                break;
         }
         response.getWriter().write(rs.toString());
     }
+    //获取所有用户列表的请求
     private ResponseCode listDo(HttpServletRequest request){
         ResponseCode rs = new ResponseCode();
-        HttpSession session = request.getSession();
-        Users user = (Users)session.getAttribute("user");
+        HttpSession session = request.getSession(); //判断是否登录
+        Users user = (Users)session.getAttribute("user"); //获取session信息
         if(user == null){
             rs.setStatus(3);
             rs.setMag("请登录后操作");
@@ -63,21 +62,24 @@ public class UsersController extends HttpServlet {
         rs = uc.selectAll(pageSize,pageNum);
         return rs;
     }
+    //用户登录的请求
     private ResponseCode loginDo(HttpServletRequest request){
+        //获取参数
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+
         ResponseCode rs = uc.selectOne(username,password);
+
+        //获取session对象
         HttpSession session = request.getSession();
         session.setAttribute("user",rs.getData());
+        //调用业务层处理业务
+        return rs;
+    }
+    //禁用用户的请求
+    private ResponseCode disableuserDo(HttpServletRequest request){
+        String uid = request.getParameter("uid");
+        ResponseCode rs = uc.selectOne(uid);
         return rs;
     }
 }
-
-
-
-
-
-
-
-
-
