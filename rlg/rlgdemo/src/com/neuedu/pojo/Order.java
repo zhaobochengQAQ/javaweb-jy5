@@ -6,7 +6,7 @@ public class Order {
     private Integer user_id;//用户id
     private Integer order_no;//订单号
     private Double payment;//实际支付金额
-    private Integer payment_type;//支付类型
+    private String payment_type;//支付类型
     private Integer postage;//'运费，单位是元',
     private Integer status;//'订单状态：0-已取消 10-未付款 20-已付款 40-已发货 50-交易成功 60-交易关闭',
     private String payment_time;//支付时间
@@ -59,11 +59,11 @@ public class Order {
         this.payment = payment;
     }
 
-    public Integer getPayment_type() {
+    public String getPayment_type() {
         return payment_type;
     }
 
-    public void setPayment_type(Integer payment_type) {
+    public void setPayment_type(String payment_type) {
         this.payment_type = payment_type;
     }
 
